@@ -1,0 +1,21 @@
+{
+  "name": "@oleksii-pavlov/http",
+  "version": "1.0.0",
+  "description": "Tiny http client based on Fetch API",
+  "main": "./build/index.js",
+  "scripts": {
+    "prepublishOnly": "npm run build",
+    "build": "tsc"
+  },
+  "keywords": [
+    "http",
+    "fetch",
+    "utils"
+  ],
+  "author": "Oleksii Pavlov <aleshapavlov9@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.13",
+    "typescript": "^5.4.5"
+  }
+}
