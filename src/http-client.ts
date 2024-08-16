@@ -12,19 +12,22 @@ export class HTTPClient {
     this.config = normalizeConfig(config)
   }
 
-  get(path: string, init: RequestOptions = {}, config: ClientConfig = {}) {
+  get<Result>(path: string, init: RequestOptions = {}, config: ClientConfig = {}) {
     const fullConfig = deepMerge<Required<ClientConfig>>(this.config, config)
-    
+
     return fetch(this.getRequestPath(path, fullConfig.base), {
       ...init,
       method: 'GET',
       headers: this.getHeaders(init.headers || {}, fullConfig.json),
     })
       .then(this.mapResponse)
-      .then(response => fullConfig.parse ? this.parseJSONResponse(response) : response)
+      .then(response => fullConfig.parse 
+        ? this.parseJSONResponse<Result>(response)
+        : new Promise<Result>((res) => res(response as Result))
+      )
   }
 
-  post(path: string, body: any, init: RequestOptions = {}, config: ClientConfig = {}) {
+  post<Body, Result>(path: string, body: Body, init: RequestOptions = {}, config: ClientConfig = {}) {
     const fullConfig = deepMerge<Required<ClientConfig>>(this.config, config)
 
     return fetch(this.getRequestPath(path, fullConfig.base), {
@@ -34,10 +37,13 @@ export class HTTPClient {
       body: this.getRequestBody(body)
     })
       .then(this.mapResponse)
-      .then(response => fullConfig.parse ? this.parseJSONResponse(response) : response)
+      .then(response => fullConfig.parse 
+        ? this.parseJSONResponse<Result>(response) 
+        : new Promise<Result>((res) => res(response as Result))
+      )
   }
 
-  put(path: string, body: any, init: RequestOptions = {}, config: ClientConfig = {}) {
+  put<Body, Result>(path: string, body: Body, init: RequestOptions = {}, config: ClientConfig = {}) {
     const fullConfig = deepMerge<Required<ClientConfig>>(this.config, config)
 
     return fetch(this.getRequestPath(path, fullConfig.base), {
@@ -47,10 +53,13 @@ export class HTTPClient {
       body: this.getRequestBody(body)
     })
       .then(this.mapResponse)
-      .then(response => fullConfig.parse ? this.parseJSONResponse(response) : response)
+      .then(response => fullConfig.parse 
+        ? this.parseJSONResponse<Result>(response) 
+        : new Promise<Result>((res) => res(response as Result))
+      )
   }
 
-  patch(path: string, body: any, init: RequestOptions = {}, config: ClientConfig = {}) {
+  patch<Body, Result>(path: string, body: Body, init: RequestOptions = {}, config: ClientConfig = {}) {
     const fullConfig = deepMerge<Required<ClientConfig>>(this.config, config)
 
     return fetch(this.getRequestPath(path, fullConfig.base), {
@@ -60,10 +69,13 @@ export class HTTPClient {
       body: this.getRequestBody(body)
     })
       .then(this.mapResponse) 
-      .then(response => fullConfig.parse ? this.parseJSONResponse(response) : response)
+      .then(response => fullConfig.parse 
+        ? this.parseJSONResponse<Result>(response) 
+        : new Promise<Result>((res) => res(response as Result))
+      )
   }
 
-  delete(path: string, init: RequestOptions = {}, config: ClientConfig = {}) {
+  delete<Result>(path: string, init: RequestOptions = {}, config: ClientConfig = {}) {
     const fullConfig = deepMerge<Required<ClientConfig>>(this.config, config)
 
     return fetch(this.getRequestPath(path, fullConfig.base), {
@@ -72,10 +84,13 @@ export class HTTPClient {
       headers: this.getHeaders(init.headers || {}, fullConfig.json),
     })
       .then(this.mapResponse)
-      .then(response => fullConfig.parse ? this.parseJSONResponse(response) : response)
+      .then(response => fullConfig.parse 
+        ? this.parseJSONResponse<Result>(response)
+        : new Promise<Result>((res) => res(response as Result))
+      )
   }
 
-  other(method: string, path: string, init: RequestInit = {}, config: ClientConfig = {}) {
+  other<Result>(method: string, path: string, init: RequestInit = {}, config: ClientConfig = {}) {
     const fullConfig = deepMerge<Required<ClientConfig>>(this.config, config)
 
     return fetch(this.getRequestPath(path, fullConfig.base), {
@@ -84,7 +99,10 @@ export class HTTPClient {
       headers: this.getHeaders(init.headers || {}, fullConfig.json),
     })
       .then(this.mapResponse)
-      .then(response => fullConfig.parse ? this.parseJSONResponse(response) : response)
+      .then(response => fullConfig.parse 
+        ? this.parseJSONResponse<Result>(response) 
+        : new Promise<Result>((res) => res(response as Result))
+      )
   }
 
   private getRequestPath(path: string, base: string) {
@@ -109,7 +127,7 @@ export class HTTPClient {
     })
   }
 
-  private parseJSONResponse(response: RequestResponse) {
-    return response.json()
+  private parseJSONResponse<T>(response: RequestResponse) {
+    return response.json<T>()
   }
 }
