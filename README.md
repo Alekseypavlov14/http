@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `HTTPClient` class is a flexible and configurable HTTP client designed for making various types of HTTP requests (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`, and custom methods) in a standardized manner. It allows users to customize the configuration at both the client level and per-request level. This class supports JSON requests and responses, automatically handling JSON parsing if specified.
+The `HTTPClient` class is a flexible and configurable HTTP client designed for making various types of HTTP requests (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`, and custom methods) in a standardized manner. It allows users to customize the configuration at both the client level and per-request level. This class supports JSON requests and responses, automatically handling JSON parsing if specified. Additionally, it leverages TypeScript's generics to provide strong typing for response data, ensuring that you receive the expected data shape from your API requests.
 
 ## Constructor
 
@@ -18,7 +18,7 @@ The `HTTPClient` class is a flexible and configurable HTTP client designed for m
 
 ## Methods
 
-### `get(path: string, init: RequestOptions = {}, config: ClientConfig = {})`
+### `get<Result>(path: string, init: RequestOptions = {}, config: ClientConfig = {})`
 
 - **Description:** Sends a `GET` request to the specified `path`.
 
@@ -27,9 +27,12 @@ The `HTTPClient` class is a flexible and configurable HTTP client designed for m
   - `init`: Optional `RequestOptions` to override the default request options. [Reference](#requestoptions)
   - `config`: Optional `ClientConfig` to override the client instance's default configuration for this request. [Reference](#clientconfig)
 
-- **Returns:** A `Promise` that resolves to a `RequestResponse`. [Reference](#requestresponse)
+- **Returns:** A `Promise` that resolves to a `Result`, which is the expected response type.
 
-### `post(path: string, body: any, init: RequestOptions = {}, config: ClientConfig = {})`
+- **Generics:**
+  - `Result`: The expected type of the response data. This can be any shape depending on your API response. 
+
+### `post<Body, Result>(path: string, body: Body, init: RequestOptions = {}, config: ClientConfig = {})`
 
 - **Description:** Sends a `POST` request to the specified `path` with the provided `body`.
 
@@ -39,25 +42,37 @@ The `HTTPClient` class is a flexible and configurable HTTP client designed for m
   - `init`: Optional `RequestOptions`. [Reference](#requestoptions)
   - `config`: Optional `ClientConfig`. [Reference](#clientconfig)
 
-- **Returns:** A `Promise` that resolves to a `RequestResponse`. [Reference](#requestresponse)
+- **Returns:** A `Promise` that resolves to a `Result`, which is the expected response type.
 
-### `put(path: string, body: any, init: RequestOptions = {}, config: ClientConfig = {})`
+- **Generics:**
+  - `Body`: The type of the request body.
+  - `Result`: The expected type of the response data.
+
+### `put<Body, Result>(path: string, body: Body, init: RequestOptions = {}, config: ClientConfig = {})`
 
 - **Description:** Sends a `PUT` request to the specified `path` with the provided `body`.
 
 - **Parameters:** Same as `post()`.
 
-- **Returns:** A `Promise` that resolves to a `RequestResponse`. [Reference](#requestresponse)
+- **Returns:** A `Promise` that resolves to a `Result`, which is the expected response type.
 
-### `patch(path: string, body: any, init: RequestOptions = {}, config: ClientConfig = {})`
+- **Generics:**
+  - `Body`: The type of the request body.
+  - `Result`: The expected type of the response data.
+
+### `patch<Body, Result>(path: string, body: Body, init: RequestOptions = {}, config: ClientConfig = {})`
 
 - **Description:** Sends a `PATCH` request to the specified `path` with the provided `body`.
 
 - **Parameters:** Same as `post()`.
 
-- **Returns:** A `Promise` that resolves to a `RequestResponse`. [Reference](#requestresponse)
+- **Returns:** A `Promise` that resolves to a `Result`, which is the expected response type.
 
-### `delete(path: string, init: RequestOptions = {}, config: ClientConfig = {})`
+- **Generics:**
+  - `Body`: The type of the request body.
+  - `Result`: The expected type of the response data.
+
+### `delete<Result>(path: string, init: RequestOptions = {}, config: ClientConfig = {})`
 
 - **Description:** Sends a `DELETE` request to the specified `path`.
 
@@ -66,9 +81,12 @@ The `HTTPClient` class is a flexible and configurable HTTP client designed for m
   - `init`: Optional `RequestOptions`. [Reference](#requestoptions)
   - `config`: Optional `ClientConfig`. [Reference](#clientconfig)
 
-- **Returns:** A `Promise` that resolves to a `RequestResponse`. [Reference](#requestresponse)
+- **Returns:** A `Promise` that resolves to a `Result`, which is the expected response type.
 
-### `other(method: string, path: string, init: RequestInit = {}, config: ClientConfig = {})`
+- **Generics:**
+  - `Result`: The expected type of the response data.
+
+### `other<Result>(method: string, path: string, init: RequestInit = {}, config: ClientConfig = {})`
 
 - **Description:** Sends a request with a custom HTTP method.
 
@@ -78,7 +96,10 @@ The `HTTPClient` class is a flexible and configurable HTTP client designed for m
   - `init`: Optional `RequestInit` (Fetch API).
   - `config`: Optional `ClientConfig`. [Reference](#clientconfig)
 
-- **Returns:** A `Promise` that resolves to a `RequestResponse`. [Reference](#requestresponse)
+- **Returns:** A `Promise` that resolves to a `Result`, which is the expected response type.
+
+- **Generics:**
+  - `Result`: The expected type of the response data.
 
 ## Interfaces and Types
 
@@ -114,13 +135,22 @@ const client = new HTTPClient({
   base: 'https://api.example.com',
 })
 
+interface User {
+  id: number
+  name: string
+}
+
+interface UserDTO {
+  name: string
+}
+
 // GET request
-client.get('/users')
+client.get<User[]>('/users')
   .then(response => console.log(response))
   .catch(error => console.error(error))
 
 // POST request with a JSON body
-client.post('/users', { name: 'John Doe' })
+client.post<UserDTO, User>('/users', { name: 'John Doe' })
   .then(response => console.log(response))
   .catch(error => console.error(error))
 ```
