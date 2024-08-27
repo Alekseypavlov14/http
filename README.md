@@ -121,14 +121,6 @@ The `RequestOptions` type is a simplified version of the `RequestInit` interface
 type RequestOptions = Omit<RequestInit, 'method' | 'body'>
 ```
 
-### `RequestResponse`
-
-The `RequestResponse` interface extends the `Response` interface, overriding the `json` method to ensure it returns a typed promise.
-
-- **Properties:**
-  - Inherits all properties from `Response` (Fetch API).
-  - `json: <T = unknown>() => Promise<T>`: A method that returns a `Promise` with the parsed JSON object of type `T`.
-
 ## Example Usage
 
 ```typescript

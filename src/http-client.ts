@@ -20,7 +20,6 @@ export class HTTPClient {
       method: 'GET',
       headers: this.getHeaders(init.headers || {}, fullConfig.headers(), fullConfig.json),
     })
-      .then(this.mapResponse)
       .then(response => fullConfig.parse 
         ? this.parseJSONResponse<Result>(response)
         : new Promise<Result>((res) => res(response as Result))
@@ -36,7 +35,6 @@ export class HTTPClient {
       headers: this.getHeaders(init.headers || {}, fullConfig.headers(), fullConfig.json),
       body: this.getRequestBody(body)
     })
-      .then(this.mapResponse)
       .then(response => fullConfig.parse 
         ? this.parseJSONResponse<Result>(response) 
         : new Promise<Result>((res) => res(response as Result))
@@ -52,7 +50,6 @@ export class HTTPClient {
       headers: this.getHeaders(init.headers || {}, fullConfig.headers(), fullConfig.json),
       body: this.getRequestBody(body)
     })
-      .then(this.mapResponse)
       .then(response => fullConfig.parse 
         ? this.parseJSONResponse<Result>(response) 
         : new Promise<Result>((res) => res(response as Result))
@@ -68,7 +65,6 @@ export class HTTPClient {
       headers: this.getHeaders(init.headers || {}, fullConfig.headers(), fullConfig.json),
       body: this.getRequestBody(body)
     })
-      .then(this.mapResponse) 
       .then(response => fullConfig.parse 
         ? this.parseJSONResponse<Result>(response) 
         : new Promise<Result>((res) => res(response as Result))
@@ -83,7 +79,6 @@ export class HTTPClient {
       method: 'DELETE',
       headers: this.getHeaders(init.headers || {}, fullConfig.headers(), fullConfig.json),
     })
-      .then(this.mapResponse)
       .then(response => fullConfig.parse 
         ? this.parseJSONResponse<Result>(response)
         : new Promise<Result>((res) => res(response as Result))
@@ -98,7 +93,6 @@ export class HTTPClient {
       method,
       headers: this.getHeaders(init.headers || {}, fullConfig.headers(), fullConfig.json),
     })
-      .then(this.mapResponse)
       .then(response => fullConfig.parse 
         ? this.parseJSONResponse<Result>(response) 
         : new Promise<Result>((res) => res(response as Result))
@@ -119,13 +113,6 @@ export class HTTPClient {
     return (body instanceof FormData || typeof body === 'string')
       ? body 
       : JSON.stringify(body)
-  }
-  
-  private mapResponse(response: Response): RequestResponse {
-    return ({
-      ...response,
-      json: <T = unknown>() => response.json() as Promise<T>
-    })
   }
 
   private parseJSONResponse<T>(response: RequestResponse) {
