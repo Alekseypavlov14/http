@@ -18,7 +18,7 @@ export class HTTPClient {
     return fetch(this.getRequestPath(path, fullConfig.base), {
       ...init,
       method: 'GET',
-      headers: this.getHeaders(init.headers || {}, fullConfig.json),
+      headers: this.getHeaders(init.headers || {}, fullConfig.headers, fullConfig.json),
     })
       .then(this.mapResponse)
       .then(response => fullConfig.parse 
@@ -33,7 +33,7 @@ export class HTTPClient {
     return fetch(this.getRequestPath(path, fullConfig.base), {
       ...init,
       method: 'POST',
-      headers: this.getHeaders(init.headers || {}, fullConfig.json),
+      headers: this.getHeaders(init.headers || {}, fullConfig.headers, fullConfig.json),
       body: this.getRequestBody(body)
     })
       .then(this.mapResponse)
@@ -49,7 +49,7 @@ export class HTTPClient {
     return fetch(this.getRequestPath(path, fullConfig.base), {
       ...init,
       method: 'PUT',
-      headers: this.getHeaders(init.headers || {}, fullConfig.json),
+      headers: this.getHeaders(init.headers || {}, fullConfig.headers, fullConfig.json),
       body: this.getRequestBody(body)
     })
       .then(this.mapResponse)
@@ -65,7 +65,7 @@ export class HTTPClient {
     return fetch(this.getRequestPath(path, fullConfig.base), {
       ...init,
       method: 'PATCH',
-      headers: this.getHeaders(init.headers || {}, fullConfig.json),
+      headers: this.getHeaders(init.headers || {}, fullConfig.headers, fullConfig.json),
       body: this.getRequestBody(body)
     })
       .then(this.mapResponse) 
@@ -81,7 +81,7 @@ export class HTTPClient {
     return fetch(this.getRequestPath(path, fullConfig.base), {
       ...init,
       method: 'DELETE',
-      headers: this.getHeaders(init.headers || {}, fullConfig.json),
+      headers: this.getHeaders(init.headers || {}, fullConfig.headers, fullConfig.json),
     })
       .then(this.mapResponse)
       .then(response => fullConfig.parse 
@@ -96,7 +96,7 @@ export class HTTPClient {
     return fetch(this.getRequestPath(path, fullConfig.base), {
       ...init,
       method,
-      headers: this.getHeaders(init.headers || {}, fullConfig.json),
+      headers: this.getHeaders(init.headers || {}, fullConfig.headers, fullConfig.json),
     })
       .then(this.mapResponse)
       .then(response => fullConfig.parse 
@@ -109,9 +109,10 @@ export class HTTPClient {
     return base + path
   }
 
-  private getHeaders(initHeaders: HeadersInit, json: boolean) {
+  private getHeaders(initHeaders: HeadersInit, configHeaders: HeadersInit, json: boolean) {
+    const normalizedConfigHeaders = configHeaders instanceof Array ? Object.fromEntries(configHeaders) : configHeaders
     const normalizedInitHeaders = initHeaders instanceof Array ? Object.fromEntries(initHeaders) : (initHeaders || {})
-    return Object.assign({}, normalizedInitHeaders, json ? JSONHeaders : {})
+    return Object.assign({}, normalizedConfigHeaders, normalizedInitHeaders, json ? JSONHeaders : {})
   }
   
   private getRequestBody(body: any) {

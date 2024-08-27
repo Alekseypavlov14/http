@@ -111,6 +111,7 @@ The `ClientConfig` interface defines the configuration options available for the
   - `base?: string` (default: ""): Optional base URL for all requests made with the client.
   - `json?: boolean` (default: true): If `true`, the client automatically adds `Content-Type: application/json` to headers and stringifies request bodies.
   - `parse?: boolean` (default: true if config.json is true): If `true`, the client automatically parses JSON responses.
+  - `headers?: HeadersInit` (default: {}): preloaded headers, can be used for authorization, server special etc.
 
 ### `RequestOptions`
 
