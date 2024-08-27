@@ -6,5 +6,6 @@ export function normalizeConfig(config: ClientConfig): Required<ClientConfig> {
     json: config.json ?? true,
     parse: config.parse ?? Boolean(config.json),
     headers: config.headers ?? (() => ({})),
+    middleware: config.middleware ?? ((response: Response) => response)
   })
 }

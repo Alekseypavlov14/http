@@ -112,6 +112,7 @@ The `ClientConfig` interface defines the configuration options available for the
   - `json?: boolean` (default: true): If `true`, the client automatically adds `Content-Type: application/json` to headers and stringifies request bodies.
   - `parse?: boolean` (default: true if config.json is true): If `true`, the client automatically parses JSON responses.
   - `headers?: () => HeadersInit` (default: () => ({})): preloaded headers getter, can be used for authorization, server special etc.
+  - `middleware?: (response: Response) => Response` (default: res => res): contains custom logic to throw exceptions, log responses and so on
 
 ### `RequestOptions`
 

@@ -3,4 +3,5 @@ export interface ClientConfig {
   json?: boolean
   parse?: boolean
   headers?: () => HeadersInit
+  middleware?: (res: Response) => Response
 }

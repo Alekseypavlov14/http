@@ -20,6 +20,7 @@ export class HTTPClient {
       method: 'GET',
       headers: this.getHeaders(init.headers || {}, fullConfig.headers(), fullConfig.json),
     })
+      .then(fullConfig.middleware)
       .then(response => fullConfig.parse 
         ? this.parseJSONResponse<Result>(response)
         : new Promise<Result>((res) => res(response as Result))
@@ -35,6 +36,7 @@ export class HTTPClient {
       headers: this.getHeaders(init.headers || {}, fullConfig.headers(), fullConfig.json),
       body: this.getRequestBody(body)
     })
+      .then(fullConfig.middleware)
       .then(response => fullConfig.parse 
         ? this.parseJSONResponse<Result>(response) 
         : new Promise<Result>((res) => res(response as Result))
@@ -50,6 +52,7 @@ export class HTTPClient {
       headers: this.getHeaders(init.headers || {}, fullConfig.headers(), fullConfig.json),
       body: this.getRequestBody(body)
     })
+      .then(fullConfig.middleware)
       .then(response => fullConfig.parse 
         ? this.parseJSONResponse<Result>(response) 
         : new Promise<Result>((res) => res(response as Result))
@@ -65,6 +68,7 @@ export class HTTPClient {
       headers: this.getHeaders(init.headers || {}, fullConfig.headers(), fullConfig.json),
       body: this.getRequestBody(body)
     })
+      .then(fullConfig.middleware)
       .then(response => fullConfig.parse 
         ? this.parseJSONResponse<Result>(response) 
         : new Promise<Result>((res) => res(response as Result))
@@ -79,6 +83,7 @@ export class HTTPClient {
       method: 'DELETE',
       headers: this.getHeaders(init.headers || {}, fullConfig.headers(), fullConfig.json),
     })
+      .then(fullConfig.middleware)
       .then(response => fullConfig.parse 
         ? this.parseJSONResponse<Result>(response)
         : new Promise<Result>((res) => res(response as Result))
@@ -93,6 +98,7 @@ export class HTTPClient {
       method,
       headers: this.getHeaders(init.headers || {}, fullConfig.headers(), fullConfig.json),
     })
+      .then(fullConfig.middleware)
       .then(response => fullConfig.parse 
         ? this.parseJSONResponse<Result>(response) 
         : new Promise<Result>((res) => res(response as Result))
