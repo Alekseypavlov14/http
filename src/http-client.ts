@@ -112,7 +112,7 @@ export class HTTPClient {
   private getHeaders(initHeaders: HeadersInit, configHeaders: HeadersInit, json: boolean) {
     const normalizedConfigHeaders = configHeaders instanceof Array ? Object.fromEntries(configHeaders) : configHeaders
     const normalizedInitHeaders = initHeaders instanceof Array ? Object.fromEntries(initHeaders) : (initHeaders || {})
-    return Object.assign({}, normalizedConfigHeaders, normalizedInitHeaders, json ? JSONHeaders : {})
+    return Object.assign({}, normalizedConfigHeaders, json ? JSONHeaders : {}, normalizedInitHeaders)
   }
   
   private getRequestBody(body: any) {
